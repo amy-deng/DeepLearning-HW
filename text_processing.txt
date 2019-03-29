@@ -1,0 +1,33 @@
+Text processing
+Goal: text:str => vector/matrix
+
+Step 1: tokenization
+text:str 'a cat sat on mat' => tokens: list[str] ['a','cat','sat','on','a','mat']
+1. remove punctuation
+2. uppercase => lowercase(tricky, US,us,Apple,apple)
+3. plural => singular
+4. remove stop words
+5. spelling correction (corection->correction)
+
+Step 2: build vocabulary
+'a','cat','sat','on','mat' => vocab size: 10k
+
+Step 3: encoding
+[1,2,3,4,1,5]
+sequence: list[int]
+
+Step 4: alignment/padding
+(different size of sequences)
+
+
+Word Embedding (word2vec)
+'cat' =>(encoding) 2 =>(embedding) [,,,,,,]
+
+- token {1. word level, 2.char level}
+- tokenization
+- dictionary
+- vocab size
+- encoding
+- sequence
+- alignment/padding
+- embedding/word2vec --> word => vec, seq => mat
