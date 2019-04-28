@@ -153,4 +153,4 @@ plt.savefig("train-val-MSE-curve.png")
 pred = model_lstm.predict(X_test)
 
 submission = pd.DataFrame(pred,columns=['item_cnt_month'])
-submission.to_csv('lstm_submission_new.csv',index_label='ID')
+submission.to_csv('lstm_submission.csv',index_label='ID')
