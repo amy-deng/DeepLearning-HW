@@ -350,7 +350,7 @@ matrix = lag_feature(matrix, [1], 'delta_revenue')
 
 matrix.drop(['date_shop_revenue','shop_avg_revenue','delta_revenue'], axis=1, inplace=True)
 
-### ------------- add date feature -------------
+### ------------- add other feature -------------
 
 matrix['month'] = matrix['date_block_num'] % 12
 days = pd.Series([31,28,31,30,31,30,31,31,30,31,30,31])
