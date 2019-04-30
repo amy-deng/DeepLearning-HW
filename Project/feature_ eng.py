@@ -181,7 +181,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_avg_item_cnt')
 matrix.drop(['date_shop_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on item_category_id    
+# average monthly sales based on item_category_id   ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'item_category_id']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_cat_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -193,7 +193,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_cat_avg_item_cnt')
 matrix.drop(['date_cat_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on shop_id and item_category_id    
+# average monthly sales based on shop_id and item_category_id    ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'shop_id', 'item_category_id']).agg({'item_cnt_month': ['mean']})
 group.columns = ['date_shop_cat_avg_item_cnt']
 group.reset_index(inplace=True)
@@ -205,7 +205,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_cat_avg_item_cnt')
 matrix.drop(['date_shop_cat_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on shop_id and type_code   
+# average monthly sales based on shop_id and type_code  ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'shop_id', 'type_code']).agg({'item_cnt_month': ['mean']})
 group.columns = ['date_shop_type_avg_item_cnt']
 group.reset_index(inplace=True)
@@ -217,7 +217,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_type_avg_item_cnt')
 matrix.drop(['date_shop_type_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on shop_id and subtype_code   
+# average monthly sales based on shop_id and subtype_code  ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'shop_id', 'subtype_code']).agg({'item_cnt_month': ['mean']})
 group.columns = ['date_shop_subtype_avg_item_cnt']
 group.reset_index(inplace=True)
@@ -228,7 +228,7 @@ matrix['date_shop_subtype_avg_item_cnt'] = matrix['date_shop_subtype_avg_item_cn
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_subtype_avg_item_cnt')
 matrix.drop(['date_shop_subtype_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on city_code   
+# average monthly sales based on city_code  ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'city_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_city_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -239,7 +239,7 @@ matrix['date_city_avg_item_cnt'] = matrix['date_city_avg_item_cnt'].astype(np.fl
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_city_avg_item_cnt')
 matrix.drop(['date_city_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on item_id and city_code   
+# average monthly sales based on item_id and city_code  ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'item_id', 'city_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_item_city_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -250,7 +250,7 @@ matrix['date_item_city_avg_item_cnt'] = matrix['date_item_city_avg_item_cnt'].as
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_item_city_avg_item_cnt')
 matrix.drop(['date_item_city_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on type_code   
+# average monthly sales based on type_code  ************ use only lag 1
 group = matrix.groupby(['date_block_num', 'type_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_type_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -261,7 +261,7 @@ matrix['date_type_avg_item_cnt'] = matrix['date_type_avg_item_cnt'].astype(np.fl
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_type_avg_item_cnt')
 matrix.drop(['date_type_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on subtype_code   
+# average monthly sales based on subtype_code  ************ use only lag 1
 
 group = matrix.groupby(['date_block_num', 'subtype_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_subtype_avg_item_cnt' ]
@@ -350,7 +350,7 @@ matrix = lag_feature(matrix, [1], 'delta_revenue')
 
 matrix.drop(['date_shop_revenue','shop_avg_revenue','delta_revenue'], axis=1, inplace=True)
 
-### ------------- add other feature -------------
+### ------------- add date feature -------------
 
 matrix['month'] = matrix['date_block_num'] % 12
 days = pd.Series([31,28,31,30,31,30,31,31,30,31,30,31])
@@ -370,7 +370,24 @@ for idx, row in matrix.iterrows():
         last_date_block_num = tmp_dict[key]
         matrix.at[idx, 'item_shop_last_sale'] = row.date_block_num - last_date_block_num
         tmp_dict[key] = row.date_block_num  
+
         
+# last sold time based on item_id
+tmp_dict = {}
+matrix['item_last_sale'] = -1
+matrix['item_last_sale'] = matrix['item_last_sale'].astype(np.int8)
+for idx, row in matrix.iterrows():    
+    key = row.item_id
+    if key not in tmp_dict:
+        if row.item_cnt_month!=0:
+            tmp_dict[key] = row.date_block_num
+    else:
+        last_date_block_num = tmp_dict[key]
+        if row.date_block_num>last_date_block_num:
+            matrix.at[idx, 'item_last_sale'] = row.date_block_num - last_date_block_num
+            tmp_dict[key] = row.date_block_num
+            
+            
 # first sold time based on item_id and shop_id
 matrix['item_shop_first_sale'] = matrix['date_block_num'] - matrix.groupby(['item_id','shop_id'])['date_block_num'].transform('min')
 
