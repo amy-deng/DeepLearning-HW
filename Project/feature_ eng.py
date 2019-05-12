@@ -181,7 +181,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_avg_item_cnt')
 matrix.drop(['date_shop_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on item_category_id   ************ use only lag 1
+# average monthly sales based on item_category_id    
 group = matrix.groupby(['date_block_num', 'item_category_id']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_cat_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -193,7 +193,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_cat_avg_item_cnt')
 matrix.drop(['date_cat_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on shop_id and item_category_id    ************ use only lag 1
+# average monthly sales based on shop_id and item_category_id     
 group = matrix.groupby(['date_block_num', 'shop_id', 'item_category_id']).agg({'item_cnt_month': ['mean']})
 group.columns = ['date_shop_cat_avg_item_cnt']
 group.reset_index(inplace=True)
@@ -205,7 +205,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_cat_avg_item_cnt')
 matrix.drop(['date_shop_cat_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on shop_id and type_code  ************ use only lag 1
+# average monthly sales based on shop_id and type_code   
 group = matrix.groupby(['date_block_num', 'shop_id', 'type_code']).agg({'item_cnt_month': ['mean']})
 group.columns = ['date_shop_type_avg_item_cnt']
 group.reset_index(inplace=True)
@@ -217,7 +217,7 @@ matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_type_avg_item_cnt')
 matrix.drop(['date_shop_type_avg_item_cnt'], axis=1, inplace=True)
 
 
-# average monthly sales based on shop_id and subtype_code  ************ use only lag 1
+# average monthly sales based on shop_id and subtype_code   
 group = matrix.groupby(['date_block_num', 'shop_id', 'subtype_code']).agg({'item_cnt_month': ['mean']})
 group.columns = ['date_shop_subtype_avg_item_cnt']
 group.reset_index(inplace=True)
@@ -228,7 +228,7 @@ matrix['date_shop_subtype_avg_item_cnt'] = matrix['date_shop_subtype_avg_item_cn
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_shop_subtype_avg_item_cnt')
 matrix.drop(['date_shop_subtype_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on city_code  ************ use only lag 1
+# average monthly sales based on city_code   
 group = matrix.groupby(['date_block_num', 'city_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_city_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -239,7 +239,7 @@ matrix['date_city_avg_item_cnt'] = matrix['date_city_avg_item_cnt'].astype(np.fl
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_city_avg_item_cnt')
 matrix.drop(['date_city_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on item_id and city_code  ************ use only lag 1
+# average monthly sales based on item_id and city_code   
 group = matrix.groupby(['date_block_num', 'item_id', 'city_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_item_city_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -250,7 +250,7 @@ matrix['date_item_city_avg_item_cnt'] = matrix['date_item_city_avg_item_cnt'].as
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_item_city_avg_item_cnt')
 matrix.drop(['date_item_city_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on type_code  ************ use only lag 1
+# average monthly sales based on type_code   
 group = matrix.groupby(['date_block_num', 'type_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_type_avg_item_cnt' ]
 group.reset_index(inplace=True)
@@ -261,7 +261,7 @@ matrix['date_type_avg_item_cnt'] = matrix['date_type_avg_item_cnt'].astype(np.fl
 matrix = lag_feature(matrix, [1,2,3,6,12], 'date_type_avg_item_cnt')
 matrix.drop(['date_type_avg_item_cnt'], axis=1, inplace=True)
 
-# average monthly sales based on subtype_code  ************ use only lag 1
+# average monthly sales based on subtype_code  
 
 group = matrix.groupby(['date_block_num', 'subtype_code']).agg({'item_cnt_month': ['mean']})
 group.columns = [ 'date_subtype_avg_item_cnt' ]
